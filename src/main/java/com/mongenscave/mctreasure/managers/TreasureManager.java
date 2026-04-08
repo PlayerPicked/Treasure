@@ -6,6 +6,7 @@ import com.mongenscave.mctreasure.identifiers.ParticleTypes;
 import com.mongenscave.mctreasure.item.ItemFactory;
 import com.mongenscave.mctreasure.managers.cooldown.CooldownManager;
 import com.mongenscave.mctreasure.model.TreasureChest;
+import com.mongenscave.mctreasure.utils.ItemUtil;
 import com.mongenscave.mctreasure.utils.LocationUtils;
 import com.mongenscave.mctreasure.utils.LoggerUtils;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
@@ -20,7 +21,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -176,10 +176,27 @@ public class TreasureManager {
                 Section itemsSection = chestSection.getSection("items");
 
                 if (itemsSection != null) {
-                    for (String itemKey : itemsSection.getRoutesAsStrings(false)) {
-                        Section itemSection = itemsSection.getSection(itemKey);
+                    for (String key : itemsSection.getRoutesAsStrings(false)) {
+                        try {
+                            Object raw = itemsSection.get(key);
+                            ItemStack item = null;
 
-                        if (itemSection != null) ItemFactory.buildItem(itemSection, "treasures." + id + ".items." + itemKey).ifPresent(items::add);
+                            if (raw instanceof String base64 && base64.startsWith("rO0")) {
+                                item = ItemUtil.deserialize(base64);
+                            } else {
+                                Section section = itemsSection.getSection(key);
+                                if (section != null) {
+                                    item = ItemFactory.buildItem(section, "treasures." + id + ".items." + key).orElse(null);
+                                }
+                            }
+
+                            if (item != null && item.getType() != Material.AIR) {
+                                items.add(item);
+                            }
+
+                        } catch (Exception exception) {
+                            LoggerUtils.error("Failed to load item: " + key);
+                        }
                     }
                 }
 
@@ -247,7 +264,6 @@ public class TreasureManager {
                 List<ItemStack> items = chest.getItems();
 
                 if (items != null && !items.isEmpty()) {
-                    treasuresConfig.set("treasures." + id + ".items", new HashMap<>());
 
                     int validItemCount = 0;
                     for (int i = 0; i < items.size(); i++) {
@@ -256,7 +272,9 @@ public class TreasureManager {
                         if (item != null && item.getType() != Material.AIR) {
                             validItemCount++;
                             String itemPath = "treasures." + id + ".items." + i;
-                            ItemFactory.serializeItem(item, treasuresConfig, itemPath);
+                            String serialized = ItemUtil.serialize(item);
+
+                            treasuresConfig.set(itemPath, serialized);
                         }
                     }
                 }

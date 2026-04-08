@@ -66,7 +66,7 @@ public class TreasureInventoryMenu extends Menu {
                     }
                 }
 
-                player.sendMessage(MessageKeys.ITEM_OBTAINED.getMessage());
+                if (!MessageKeys.ITEM_OBTAINED.getMessage().isEmpty()) player.sendMessage(MessageKeys.ITEM_OBTAINED.getMessage());
 
                 if (!cooldownRecorded) {
                     chest.recordPlayerOpen(player);
