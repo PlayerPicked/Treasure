@@ -1,5 +1,6 @@
 package com.playerpicked.treasure;
 
+import com.playerpicked.pickly.paper.PaperMetrics;
 import com.playerpicked.treasure.command.CommandRegistrar;
 import com.playerpicked.treasure.command.MainCommand;
 import com.playerpicked.treasure.config.PluginConfig;
@@ -44,6 +45,7 @@ import java.util.List;
 
 public final class Treasure extends ZapperJavaPlugin {
     private static final int SPIGOT_RESOURCE_ID = 125956;
+    private static final String PICKLY_PLUGIN_KEY = "pck_wNx7WBqp736hPlACS0aQy61r";
 
     private final List<AutoCloseable> resources = new ArrayList<>();
 
@@ -75,6 +77,7 @@ public final class Treasure extends ZapperJavaPlugin {
                 getSLF4JLogger().warn("Failed to close {} cleanly", resource.getClass().getSimpleName(), exception);
             }
         }
+
         resources.clear();
     }
 
@@ -133,6 +136,9 @@ public final class Treasure extends ZapperJavaPlugin {
             expansion.register();
             runOnShutdown(expansion::unregister);
         }
+
+        PaperMetrics metrics = new PaperMetrics(this, PICKLY_PLUGIN_KEY);
+        runOnShutdown(metrics::shutdown);
 
         UpdateChecker updates = new UpdateChecker(SPIGOT_RESOURCE_ID, version, messages, scheduler, logger);
         registerListeners(updates);

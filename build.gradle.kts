@@ -11,6 +11,7 @@ repositories {
     mavenCentral()
     maven("https://repo.papermc.io/repository/maven-public/")
     maven("https://repo.extendedclip.com/releases/")
+    maven("https://repo.playerpicked.com/releases")
 }
 
 dependencies {
@@ -22,6 +23,7 @@ dependencies {
         exclude(module = "lamp.brigadier")
     }
     implementation("dev.dejvokep:boosted-yaml:1.3.7")
+    implementation("com.playerpicked:pickly-paper:1.0.1")
 
     zap("io.github.revxrsal:lamp.common:4.0.0-rc.19")
     zap("io.github.revxrsal:lamp.brigadier:4.0.0-rc.19")
@@ -67,4 +69,5 @@ zapper {
     repositories { includeProjectRepositories() }
 
     relocate("dev.dejvokep.boostedyaml", "boostedyaml")
+    relocate("com.playerpicked.pickly", "pickly")
 }
