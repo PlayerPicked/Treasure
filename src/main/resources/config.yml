@@ -1,75 +1,106 @@
-aliases:
-  - "mctreasure"
+# ------------------------------------------------------------------
+#  Treasure configuration
+#  All player-facing texts live in messages.yml, menu layouts in guis.yml.
+#  Treasures themselves are stored in treasures.yml (edit them in-game
+#  with /treasure setup).
+# ------------------------------------------------------------------
+
+# Names of the main command. The first one is the main name.
+# Changes need a server restart.
+command-aliases:
   - "treasure"
   - "treasurechest"
 
+loot:
+  # true: loot is spread over random slots; false: it fills the inventory from the first slot.
+  place-randomly: true
+
+# The advancement-style popup shown when a player opens a treasure.
+# Its text is "treasure.toast-title" in messages.yml.
 toast:
   enabled: true
-  message: "&#E2287B&lFOUND A TREASURE"
   material: "CHEST"
 
-place-random: true # If it's true it will place the items randomly in the chest!
+# Holograms are text displays above the treasure, rendered separately for
+# every nearby player, so per-player values like <time-left> work.
+hologram:
+  # How the text turns towards players: CENTER, FIXED, VERTICAL or HORIZONTAL.
+  billboard: "CENTER"
+  text-shadow: true
+  # TRANSPARENT, DEFAULT (the vanilla grey box) or a hex color: "#64FF4F", or with alpha "#A064FF4F".
+  background: "TRANSPARENT"
+  # Players closer than this many blocks see the hologram.
+  view-distance: 32
+  # How often the text is refreshed (20 ticks = 1 second).
+  update-interval-ticks: 20
 
-hook:
-  hologram-type: "DecentHolograms" # DecentHolograms OR FancyHolograms
-  fancy-holograms:
-    billboard: "FIXED"
-    background: "100;255;79" # R;G;B to use transparent type -> "TRANSPARENT"
-    shadow: true
+# The particle used by each effect shape. Only particles that need no extra
+# data work here (e.g. flame, end_rod, crit, heart, witch, bubble).
+particles:
+  helix: "crit"
+  heart: "flame"
+  pulsar: "witch"
+  sphere: "end_rod"
+  tornado: "bubble"
+  phoenix: "end_rod"
+  spiral: "end_rod"
 
-treasure-tracker:
+# The compass that points players to the nearest treasure in their world
+# while they hold it. Its name and lore are in messages.yml under "tracker.item".
+tracker:
   enabled: true
-  item:
-    name: "&#E2287B&lTREASURE TRACKER"
-    material: "COMPASS"
-    lore:
-      - ""
-      - " &8&l| See where is a treasure!"
-      - ""
-  directions:
-    forward: "▲"
-    backward: "▼"
-    left: "◀"
-    right: "▶"
-  message: "&#E2287B{distance}&7m &8&l| &#E2287B{direction}" # This will appear on their actionbar
+  material: "COMPASS"
 
-placeholders:
-  status:
-    enabled: "&a☑"
-    disabled: "&c☒"
-    set: "&a☑"
-    not-set: "&c☒"
-    none: "&c☒"
+# Chat input used by the setup menu (names, permissions, cooldowns, ...).
+setup:
+  # Seconds before an unanswered question expires.
+  prompt-timeout-seconds: 30
+  # Typing this word cancels the question.
+  cancel-word: "cancel"
 
-  location:
-    format: "&7%s&8, &7%d&8, &7%d&8, &7%d"
-    not-set: "&c☒"
+# Sounds use vanilla sound keys. Leave "sound" empty to play nothing.
+sounds:
+  open:
+    sound: "minecraft:block.chest.open"
+    volume: 0.5
+    pitch: 1.0
+  close:
+    sound: "minecraft:block.chest.close"
+    volume: 0.5
+    pitch: 1.0
+  denied:
+    sound: "minecraft:entity.villager.no"
+    volume: 0.5
+    pitch: 1.0
+  pickup:
+    sound: "minecraft:entity.item.pickup"
+    volume: 0.5
+    pitch: 1.2
+  click:
+    sound: "minecraft:ui.button.click"
+    volume: 0.5
+    pitch: 1.0
+  saved:
+    sound: "minecraft:entity.experience_orb.pickup"
+    volume: 0.5
+    pitch: 1.0
+  deleted:
+    sound: "minecraft:entity.item.break"
+    volume: 0.5
+    pitch: 0.5
 
-  cooldown:
-    set: "&a%s"
-    none: "&c☒"
+# Where per-player cooldowns are stored. Changes need a server restart.
+#   h2    - a local file in the plugin folder, nothing to set up
+#   mysql - share cooldowns between servers using the same treasures
+database:
+  type: "h2"
+  mysql:
+    host: "localhost"
+    port: 3306
+    database: "treasure"
+    username: "root"
+    password: "change-me"
+    pool-size: 10
 
-  size:
-    format: "&a%d"
-
-  permission:
-    format: "&a%s"
-    none: "&c☒"
-
-  particle:
-    format: "&a%s"
-
-  hologram:
-    time-left: "&c%s"
-    ready: "&a&lREADY TO OPEN&7!"
-
-effect-particles:
-  helix: "CRIT"
-  heart: "FLAME"
-  tornado: "BUBBLE"
-  pulsar: "WITCH"
-  sphere: "END_ROD"
-  spiral: "END_ROD"
-  phoenix: "END_ROD"
-
-cooldown-storage: "JSON" # MEMORY or JSON
+# Do not change this; it is used to add new options to your file automatically.
+version: "1"

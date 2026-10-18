@@ -1,45 +1,115 @@
-prefix: "&#E2287B[Treasure]"
+# ------------------------------------------------------------------
+#  Treasure messages
+#  Format: MiniMessage - https://docs.advntr.dev/minimessage/format.html
+#  Every entry can be a single line or a list of lines.
+#  Set an entry to '' to send nothing.
+#  <prefix> works everywhere; other placeholders are listed per section.
+# ------------------------------------------------------------------
 
-messages:
-  sessions:
-    permission:
-      input: "%prefix% &aPermission set to &2{permission}"
-      failed: "%prefix% &cThe session has expired!"
-      start: "%prefix% &aType the permission, or &ccancel &ato abort the session!"
-    name:
-      input: "%prefix% &aName set to &2{name}"
-      failed: "%prefix% &cThe session has expired!"
-      start: "%prefix% &aType the name, or &ccancel &ato abort the session!"
-    cooldown:
-      input: "%prefix% &aCooldown set to &2{cooldown}"
-      failed: "%prefix% &cThe session has expired!"
-      start: "%prefix% &aType the cooldown, or &ccancel &ato abort the session! &8(&a0 &7= &c&lDISABLE&8)"
-      invalid-format: "%prefix% &cInvalid number!"
-    size:
-      input: "%prefix% &aSize set to &2{size}"
-      failed: "%prefix% &cThe session has expired!"
-      start: "%prefix% &aType the size, or &ccancel &ato abort the session! &8(&a9&7-&a54&8)"
-      invalid-size: "%prefix% &cInvalid size! It must be &49, 18, 27, 36, 45, 54&c!"
-      invalid-format: "%prefix% &cInvalid number!"
-    pushback:
-      input: "%prefix% &aPushback strength set to &2{pushback}"
-      failed: "%prefix% &cThe session has expired!"
-      start: "%prefix% &aType the strength, or &ccancel &ato abort the session! &8(&a0.0&7-&a5.0&8)"
-      invalid-strength: "%prefix% &cInvalid strength! It must be between &40.0 &cand &45.0&c!"
-      invalid-format: "%prefix% &cInvalid number!"
-    hologram:
-      blank: "%prefix% &aLine set to &8[&7&lBLANK&8]"
-      input: "%prefix% &aLine set to &2{content}"
-      failed: "%prefix% &cThe session has expired!"
-      start: "%prefix% &aType the hologram, or &ccancel &ato abort the session!"
-    location:
-      start: "%prefix% &aBreak a block to set the location!"
-      input: "%prefix% &aLocation set successfully!"
-  success-save: "%prefix% &aTreasure chest saved!"
-  cooldown: "%prefix% &cWait &4{time} before opening again!"
-  item-obtained: "%prefix% &aYou found something..."
-  inventory-full: "%prefix% &cYour inventory is full!"
-  update-notify: "%prefix% &aA new update for the plugin is now available! &8(&c{your} &f→ &e{latest}&8)"
-  reload: "%prefix% &aSuccessfully reloaded!"
-  tracker-gave: "%prefix% &aYou have successfully gave &2{target} a tracker!"
-  tracker-get: "%prefix% &8[&a&l+&8] &aTreasure Tracker"
+prefix: "<#E2287B>[Treasure]</#E2287B>"
+
+# <current>, <latest> = plugin versions (update-available only)
+general:
+  reloaded: "<prefix> <green>Configuration reloaded."
+  no-permission: "<prefix> <red>You do not have permission to do that."
+  action-failed: "<prefix> <red>Something went wrong. Please try again later."
+  update-available: "<prefix> <green>Treasure <yellow><latest></yellow> is available <dark_gray>(you run <red><current></red>)"
+
+# Shown when a player right-clicks a treasure.
+# <time> = how long until the player may loot it again (on-cooldown only)
+treasure:
+  no-permission: "<prefix> <red>You are not allowed to open this treasure."
+  on-cooldown: "<prefix> <red>Wait <dark_red><time></dark_red> before opening this treasure again!"
+  not-loaded: "<prefix> <red>Your treasure data is still loading, try again in a moment."
+  protected: "<prefix> <red>This treasure cannot be broken."
+  toast-title: "<#E2287B><bold>FOUND A TREASURE"
+
+# The inventory a player loots. The cooldown starts with the first item taken.
+# <name> = the treasure's name (titles only)
+loot:
+  item-taken: "<prefix> <green>You found something..."
+  inventory-full: "<prefix> <red>Your inventory is full!"
+  saved: "<prefix> <green>Treasure loot saved."
+  editor-title: "<dark_gray>Loot of </dark_gray><name>"
+  preview-title: "<dark_gray>Preview: </dark_gray><name>"
+
+# Hologram values. They are also what %treasure_time_left_<id>% returns.
+# <time> = the remaining cooldown (time-left only)
+hologram:
+  ready: "<green><bold>READY TO OPEN<gray>!"
+  time-left: "<red><time>"
+  too-many-lines: "<prefix> <red>A hologram can have at most 20 lines."
+
+# Feedback of the setup menu.
+# <id> = treasure id, <name>, <permission>, <cooldown>, <size>, <strength> = the new value,
+# <input> = what was typed (invalid-* only)
+setup:
+  created: "<prefix> <green>Treasure <dark_green><id></dark_green> created. Set its location to place it."
+  deleted: "<prefix> <green>Treasure <dark_green><id></dark_green> deleted."
+  gone: "<prefix> <red>This treasure no longer exists."
+  name-set: "<prefix> <green>Name set to </green><name><green>."
+  permission-set: "<prefix> <green>Permission set to <dark_green><permission></dark_green>."
+  permission-cleared: "<prefix> <green>Everyone can open this treasure now."
+  cooldown-set: "<prefix> <green>Cooldown set to <dark_green><cooldown></dark_green>."
+  size-set: "<prefix> <green>Size set to <dark_green><size></dark_green> slots."
+  pushback-set: "<prefix> <green>Pushback strength set to <dark_green><strength></dark_green>."
+  location-set: "<prefix> <green>Location set."
+  location-occupied: "<prefix> <red>Another treasure already uses that block."
+  location-pick: "<prefix> <green>Break the block that should become the treasure."
+  invalid-duration: "<prefix> <red><white><input></white> is not a duration. Examples: <white>90</white> (seconds), <white>30m</white>, <white>1h30m</white>, <white>0</white> = no cooldown."
+  invalid-size: "<prefix> <red><white><input></white> is not a valid size. Use <white>9, 18, 27, 36, 45</white> or <white>54</white>."
+  invalid-pushback: "<prefix> <red><white><input></white> is not a valid strength. Use a number between <white>0.0</white> and <white>5.0</white>."
+
+# Questions asked in chat by the setup menu.
+# <word> = the cancel word from config.yml (how-to-cancel only)
+prompts:
+  name: '<prefix> <green>Type the name in chat. MiniMessage works, e.g. <white>\<gold>\<bold>Golden Chest</white>'
+  permission: "<prefix> <green>Type the permission needed to open it, or <white>none</white> to allow everyone."
+  cooldown: "<prefix> <green>Type the cooldown, e.g. <white>90</white> (seconds), <white>30m</white>, <white>1h30m</white> or <white>0</white> for none."
+  size: "<prefix> <green>Type the size: <white>9, 18, 27, 36, 45</white> or <white>54</white>."
+  pushback: "<prefix> <green>Type the pushback strength between <white>0.0</white> and <white>5.0</white>."
+  hologram-line: '<prefix> <green>Type the line. Use <white>\<name></white> and <white>\<time-left></white>, or <white>blank</white> for an empty line.'
+  how-to-cancel: "<prefix> <gray>Type <white><word></white> to cancel."
+  cancelled: "<prefix> <gray>Cancelled."
+  expired: "<prefix> <red>You did not answer in time."
+
+# <player> = who received the tracker (given only)
+# <distance> = blocks to the nearest treasure, <direction> = one of the arrows below (action-bar only)
+tracker:
+  given: "<prefix> <green>You gave <dark_green><player></dark_green> a treasure tracker."
+  received: "<prefix> <dark_gray>[<green><bold>+</bold></green>]</dark_gray> <green>Treasure Tracker"
+  action-bar: "<#E2287B><distance></#E2287B><gray>m <dark_gray>|</dark_gray> <#E2287B><direction>"
+  item:
+    name: "<#E2287B><bold>TREASURE TRACKER"
+    lore:
+      - ""
+      - "<dark_gray>| <gray>Hold it to see where the"
+      - "<dark_gray>| <gray>nearest treasure is!"
+      - ""
+  directions:
+    forward: "▲"
+    backward: "▼"
+    left: "◀"
+    right: "▶"
+
+# Small texts used inside menus.
+# <world>, <x>, <y>, <z> = block coordinates (location only)
+display:
+  toggle:
+    on: "<green>☑"
+    off: "<red>☒"
+  none: "<red>☒"
+  not-set: "<red>☒"
+  location: "<gray><world></gray><dark_gray>, </dark_gray><gray><x></gray><dark_gray>, </dark_gray><gray><y></gray><dark_gray>, </dark_gray><gray><z>"
+  blank-line: "<dark_gray>[<gray><bold>BLANK</bold></gray>]"
+  particle-shape:
+    helix: "Helix"
+    heart: "Heart"
+    pulsar: "Pulsar"
+    sphere: "Sphere"
+    tornado: "Tornado"
+    phoenix: "Phoenix"
+    spiral: "Spiral"
+
+# Do not change this; it is used to add new texts to your file automatically.
+version: "1"

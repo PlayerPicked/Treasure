@@ -1,240 +1,297 @@
-overview-menu:
-  title: "&0&lTREASURE CHESTS"
-  size: 54
-  items:
-    create-treasure-item:
-      slot: 53
-      material: "NETHER_STAR"
-      name: "&6&lCREATE TREASURE"
-      lore:
-        - ""
-        - " &8&l| &7You can create new"
-        - " &8&l| &7treasures here!"
-        - ""
-        - " &8&l| &7ʟᴇꜰᴛ ᴄʟɪᴄᴋ &8» &fᴄʀᴇᴀᴛᴇ ɴᴇᴡ"
-        - ""
-    treasure-item:
-      material: "BARREL"
-      name: "{name}"
-      lore:
-        - ""
-        - " &8&l| &7Location &8» {location-status} &8({location-details}&8)"
-        - " &8&l| &7Pushback &8» {pushback-status}"
-        - " &8&l| &7Hologram &8» {hologram-status}"
-        - " &8&l| &7Cooldown &8» {cooldown-status}"
-        - " &8&l| &7Size &8» {size-status}"
-        - " &8&l| &7Permission &8» {permission-status}"
-        - " &8&l| &7Particle &8» {particle-status} &8(&6{particle-details}&8)"
-        - ""
-        - " &8&l| &7ʟᴇꜰᴛ ᴄʟɪᴄᴋ &8» &fᴇᴅɪᴛ"
-        - " &8&l| &7ʀɪɢʜᴛ ᴄʟɪᴄᴋ &8» &fᴘʀᴇᴠɪᴇᴡ ʟᴏᴏᴛ"
-        - " &8&l| &7ǫ ᴋᴇʏ &8» &fᴅᴇʟᴇᴛᴇ"
-        - ""
+# ------------------------------------------------------------------
+#  Treasure menus
+#
+#  Every menu has a title (plain MiniMessage, no placeholders), a number of
+#  rows (1-6) and items. Item keys that a menu knows (listed above each menu)
+#  are buttons; any other key is plain decoration.
+#
+#  Item options:
+#    material           Bukkit material name (required)
+#    slot               4 | 0,8 | 10-16,19-25 | border | corners | top | bottom
+#                       | left | right | fill | grid:<columns>x<rows>@<first slot>
+#    name, lore         MiniMessage text; may use the menu's placeholders
+#    amount             stack size (default 1)
+#    item-model         resource pack item model, e.g. "mypack:menu/back"
+#    custom-model-data  resource pack custom model data number
+#    glow               true to add the enchantment glint
+#    priority           when items share a slot, the higher priority wins
+#    variants           per-state overrides of the options above
+#
+#  A lore line is hidden when one of its placeholders has no value.
+#  Empty '' lines are always kept.
+#
+#  Treasure placeholders (overview "treasure" item, editor and hologram editor):
+#    <id>, <name>, <location>, <permission>, <cooldown>, <size>, <loot-count>,
+#    <pushback>, <pushback-strength>, <hologram>, <hologram-lines>,
+#    <hologram-height>, <particles>, <particle-shape>
+# ------------------------------------------------------------------
 
-edit-menu:
-  title: "&0&lEDITING &8- {name}"
-  size: 54
+# Buttons: previous-page, next-page, create, close
+# Placeholders everywhere: <count>, <page>, <pages>
+# The "treasure" item is drawn once per treasure in content-slots and has the treasure placeholders.
+# Treasure clicks: left = edit, right = preview loot, drop key (Q) = delete
+overview:
+  title: "<dark_gray><bold>TREASURE CHESTS"
+  rows: 6
+  content-slots: "0-44"
   items:
-    edit-name:
-      slot: 10
-      material: "NAME_TAG"
-      name: "&e&lSET NAME"
+    bottom-bar:
+      material: GRAY_STAINED_GLASS_PANE
+      slot: "45-53"
+      name: " "
+      priority: -1
+    treasure:
+      material: BARREL
+      name: "<name>"
       lore:
         - ""
-        - " &8&l| &7Set the name for"
-        - " &8&l| &7the treasure!"
+        - "<dark_gray><bold>|</bold> <gray>ID <dark_gray>» <white><id>"
+        - "<dark_gray><bold>|</bold> <gray>Location <dark_gray>» <location>"
+        - "<dark_gray><bold>|</bold> <gray>Cooldown <dark_gray>» <cooldown>"
+        - "<dark_gray><bold>|</bold> <gray>Permission <dark_gray>» <permission>"
+        - "<dark_gray><bold>|</bold> <gray>Size <dark_gray>» <green><size>"
+        - "<dark_gray><bold>|</bold> <gray>Loot <dark_gray>» <green><loot-count> item(s)"
+        - "<dark_gray><bold>|</bold> <gray>Pushback <dark_gray>» <pushback>"
+        - "<dark_gray><bold>|</bold> <gray>Hologram <dark_gray>» <hologram>"
+        - "<dark_gray><bold>|</bold> <gray>Particles <dark_gray>» <particles> <dark_gray>(<gold><particle-shape></gold>)"
         - ""
-        - " &8&l| &7Current: {name-status}"
+        - "<dark_gray><bold>|</bold> <gray>ʟᴇꜰᴛ ᴄʟɪᴄᴋ <dark_gray>» <white>ᴇᴅɪᴛ"
+        - "<dark_gray><bold>|</bold> <gray>ʀɪɢʜᴛ ᴄʟɪᴄᴋ <dark_gray>» <white>ᴘʀᴇᴠɪᴇᴡ ʟᴏᴏᴛ"
+        - "<dark_gray><bold>|</bold> <gray>ǫ ᴋᴇʏ <dark_gray>» <red>ᴅᴇʟᴇᴛᴇ"
         - ""
-        - " &8&l| &7ʟᴇꜰᴛ ᴄʟɪᴄᴋ &8» &fᴇᴅɪᴛ"
-        - ""
-    edit-permission:
-      slot: 12
-      material: "OMINOUS_TRIAL_KEY"
-      name: "&b&lSET PERMISSION"
+    previous-page:
+      material: ARROW
+      slot: 48
+      name: "<gray>Previous page"
       lore:
-        - ""
-        - " &8&l| &7Set the permission for"
-        - " &8&l| &7the treasure!"
-        - ""
-        - " &8&l| &7Current: {permission-status}"
-        - ""
-        - " &8&l| &7ʟᴇꜰᴛ ᴄʟɪᴄᴋ &8» &fᴇᴅɪᴛ"
-        - ""
-    edit-particle:
-      slot: 18
-      material: "TOTEM_OF_UNDYING"
-      name: "&6&lSET EFFECTS"
-      lore:
-        - ""
-        - " &8&l| &7Set the effects for"
-        - " &8&l| &7the treasure!"
-        - ""
-        - " &8&l| &7Current: {particle-status}"
-        - ""
-        - " &8&l| &7ʟᴇꜰᴛ ᴄʟɪᴄᴋ &8» &fᴇᴅɪᴛ"
-        - " &8&l| &7ǫ ᴋᴇʏ &8» &fᴛᴏɢɢʟᴇ"
-        - ""
-    edit-cooldown:
-      slot: 14
-      material: "CLOCK"
-      name: "&c&lSET COOLDOWN"
-      lore:
-        - ""
-        - " &8&l| &7Set the cooldown for"
-        - " &8&l| &7the treasure!"
-        - ""
-        - " &8&l| &7Current: {cooldown-status}"
-        - ""
-        - " &8&l| &7ʟᴇꜰᴛ ᴄʟɪᴄᴋ &8» &fᴇᴅɪᴛ"
-        - ""
-    edit-size:
-      slot: 16
-      material: "BOWL"
-      name: "&6&lSET SIZE"
-      lore:
-        - ""
-        - " &8&l| &7Set the size of"
-        - " &8&l| &7the treasure!"
-        - ""
-        - " &8&l| &7Current: {size-status}"
-        - ""
-        - " &8&l| &7ʟᴇꜰᴛ ᴄʟɪᴄᴋ &8» &fᴇᴅɪᴛ"
-        - ""
-    edit-location:
-      slot: 29
-      material: "SCAFFOLDING"
-      name: "&a&lSET LOCATION"
-      lore:
-        - ""
-        - " &8&l| &7Set the location of"
-        - " &8&l| &7the treasure!"
-        - ""
-        - " &8&l| &7Current: {location-status}"
-        - ""
-        - " &8&l| &7ʟᴇꜰᴛ ᴄʟɪᴄᴋ &8» &fᴇᴅɪᴛ"
-        - ""
-    edit-pushback:
-      slot: 31
-      material: "VAULT"
-      name: "&e&lSET PUSHBACK"
-      lore:
-        - ""
-        - " &8&l| &7Set the pushback for"
-        - " &8&l| &7the treasure!"
-        - ""
-        - " &8&l| &7Current: {pushback-status}"
-        - " &8&l| &7Current: {pushback-value}"
-        - ""
-        - " &8&l| &7ʟᴇꜰᴛ ᴄʟɪᴄᴋ &8» &fᴇᴅɪᴛ"
-        - " &8&l| &7ǫ ᴋᴇʏ &8» &fᴛᴏɢɢʟᴇ"
-        - ""
-    edit-hologram:
-      slot: 33
-      material: "SHULKER_SHELL"
-      name: "&d&lSET HOLOGRAM"
-      lore:
-        - ""
-        - " &8&l| &7Set the hologram for"
-        - " &8&l| &7the treasure!"
-        - ""
-        - " &8&l| &7Current: {hologram-status}"
-        - ""
-        - " &8&l| &7ʟᴇꜰᴛ ᴄʟɪᴄᴋ &8» &fᴇᴅɪᴛ"
-        - " &8&l| &7ǫ ᴋᴇʏ &8» &fᴛᴏɢɢʟᴇ"
-        - ""
-    edit-items:
-      slot: 22
-      material: "DIAMOND_SWORD"
-      name: "&e&lSET ITEMS"
-      lore:
-        - ""
-        - " &8&l| &7Set the items for"
-        - " &8&l| &7the treasure!"
-        - ""
-        - " &8&l| &7ʟᴇꜰᴛ ᴄʟɪᴄᴋ &8» &fᴇᴅɪᴛ"
-        - ""
-    save-item:
+        - "<dark_gray>Page <page>/<pages>"
+    close:
+      material: BARRIER
       slot: 49
-      material: "SLIME_BALL"
-      name: "&a&lSAVE"
+      name: "<red>Close"
+    next-page:
+      material: ARROW
+      slot: 50
+      name: "<gray>Next page"
       lore:
-        - ""
-        - " &8&l| &7Saves the changes"
-        - ""
-        - " &7ʟᴇꜰᴛ ᴄʟɪᴄᴋ &8» &fꜱᴀᴠᴇ"
-        - ""
-
-preview-menu:
-  title: "&0&lPREVIEW"
-  size: 54
-
-add-item-menu:
-  title: "&0&lADD ITEMS"
-  items:
-    save-item:
-      slot: "LAST"
-      material: "SLIME_BALL"
-      name: "&a&lSAVE"
-      lore:
-        - ""
-        - " &8&l| &7Saves the changes"
-        - ""
-        - " &8&l| &7ʟᴇꜰᴛ ᴄʟɪᴄᴋ &8» &fꜱᴀᴠᴇ"
-        - ""
-
-edit-hologram-menu:
-  title: "&0&lEDIT HOLOGRAM"
-  size: 54
-  items:
-    save-item:
+        - "<dark_gray>Page <page>/<pages>"
+    create:
+      material: NETHER_STAR
       slot: 53
-      material: "SLIME_BALL"
-      name: "&a&lSAVE"
+      name: "<gold><bold>CREATE TREASURE"
       lore:
         - ""
-        - " &8&l| &7Saves the changes"
+        - "<dark_gray><bold>|</bold> <gray>Treasures: <white><count>"
         - ""
-        - " &8&l| &7ʟᴇꜰᴛ ᴄʟɪᴄᴋ &8» &fꜱᴀᴠᴇ"
+        - "<dark_gray><bold>|</bold> <gray>ʟᴇꜰᴛ ᴄʟɪᴄᴋ <dark_gray>» <white>ᴄʀᴇᴀᴛᴇ ɴᴇᴡ"
         - ""
-    create-line-item:
-      slot: 52
-      material: "BLAZE_POWDER"
-      name: "&6&lNEW LINE"
+
+# Buttons: name, permission, cooldown, size, location, pushback, hologram, particles, loot, back
+#   pushback:  left = set strength, drop key (Q) = toggle
+#   hologram:  left = edit lines, drop key (Q) = toggle
+#   particles: left = next shape, right = previous shape, drop key (Q) = toggle
+# "pushback", "hologram" and "particles" have "on"/"off" variants.
+# Placeholders everywhere: the treasure placeholders
+editor:
+  title: "<dark_gray><bold>EDIT TREASURE"
+  rows: 6
+  items:
+    filler:
+      material: BLACK_STAINED_GLASS_PANE
+      slot: fill
+      name: " "
+    info:
+      material: BARREL
+      slot: 4
+      name: "<name>"
+      lore:
+        - "<dark_gray>ID: <id>"
+    name:
+      material: NAME_TAG
+      slot: 10
+      name: "<yellow><bold>SET NAME"
       lore:
         - ""
-        - " &8&l| &7Create a new line!"
-        - " &8&l| &7Use &6%blank% &7for a blank line!"
+        - "<dark_gray><bold>|</bold> <gray>Current <dark_gray>» </dark_gray><name>"
         - ""
-        - " &8&l| &7ʟᴇꜰᴛ ᴄʟɪᴄᴋ &8» &fɴᴇᴡ ʟɪɴᴇ"
+        - "<dark_gray><bold>|</bold> <gray>ʟᴇꜰᴛ ᴄʟɪᴄᴋ <dark_gray>» <white>ᴇᴅɪᴛ"
         - ""
-    increase-height-item:
-      slot: 51
-      material: "IRON_NUGGET"
-      name: "&b&lADD HEIGHT"
+    permission:
+      material: TRIPWIRE_HOOK
+      slot: 12
+      name: "<aqua><bold>SET PERMISSION"
       lore:
         - ""
-        - " &8&l| &7Text is too low?"
-        - " &8&l| &7Just click on me!"
+        - "<dark_gray><bold>|</bold> <gray>Current <dark_gray>» <permission>"
         - ""
-        - " &8&l| &7Current: &a{height-status}"
+        - "<dark_gray><bold>|</bold> <gray>ʟᴇꜰᴛ ᴄʟɪᴄᴋ <dark_gray>» <white>ᴇᴅɪᴛ"
         - ""
-        - " &8&l| &7ʟᴇꜰᴛ ᴄʟɪᴄᴋ &8» &a+ &a0.1"
-        - " &8&l| &7ʀɪɢʜᴛ ᴄʟɪᴄᴋ &8» &c- &a0.1"
-        - ""
-    line-item:
-      material: "SUGAR"
-      name: "{content}"
+    cooldown:
+      material: CLOCK
+      slot: 14
+      name: "<red><bold>SET COOLDOWN"
       lore:
         - ""
-        - "  &8&l| &7ʟᴇꜰᴛ ᴄʟɪᴄᴋ &8» &fᴇᴅɪᴛ ʟɪɴᴇ"
-        - "  &8&l| &7ǫ ᴋᴇʏ &8» &fʀᴇᴍᴏᴠᴇ ʟɪɴᴇ"
+        - "<dark_gray><bold>|</bold> <gray>Current <dark_gray>» <cooldown>"
         - ""
-    blank-item:
-      material: "BARRIER"
-      name: "&8[&7&lBLANK&8]"
+        - "<dark_gray><bold>|</bold> <gray>ʟᴇꜰᴛ ᴄʟɪᴄᴋ <dark_gray>» <white>ᴇᴅɪᴛ"
+        - ""
+    size:
+      material: BOWL
+      slot: 16
+      name: "<gold><bold>SET SIZE"
       lore:
         - ""
-        - "  &8&l| &7ʟᴇꜰᴛ ᴄʟɪᴄᴋ &8» &fᴇᴅɪᴛ ʟɪɴᴇ"
-        - "  &8&l| &7ǫ ᴋᴇʏ &8» &fʀᴇᴍᴏᴠᴇ ʟɪɴᴇ"
+        - "<dark_gray><bold>|</bold> <gray>Current <dark_gray>» <green><size> slots"
         - ""
+        - "<dark_gray><bold>|</bold> <gray>ʟᴇꜰᴛ ᴄʟɪᴄᴋ <dark_gray>» <white>ᴇᴅɪᴛ"
+        - ""
+    particles:
+      slot: 20
+      name: "<gold><bold>SET EFFECTS"
+      lore:
+        - ""
+        - "<dark_gray><bold>|</bold> <gray>Enabled <dark_gray>» <particles>"
+        - "<dark_gray><bold>|</bold> <gray>Shape <dark_gray>» <gold><particle-shape>"
+        - ""
+        - "<dark_gray><bold>|</bold> <gray>ʟᴇꜰᴛ ᴄʟɪᴄᴋ <dark_gray>» <white>ɴᴇxᴛ ꜱʜᴀᴘᴇ"
+        - "<dark_gray><bold>|</bold> <gray>ʀɪɢʜᴛ ᴄʟɪᴄᴋ <dark_gray>» <white>ᴘʀᴇᴠɪᴏᴜꜱ ꜱʜᴀᴘᴇ"
+        - "<dark_gray><bold>|</bold> <gray>ǫ ᴋᴇʏ <dark_gray>» <white>ᴛᴏɢɢʟᴇ"
+        - ""
+      variants:
+        "on": { material: TOTEM_OF_UNDYING, glow: true }
+        "off": { material: TOTEM_OF_UNDYING }
+    loot:
+      material: CHEST
+      slot: 22
+      name: "<yellow><bold>SET LOOT"
+      lore:
+        - ""
+        - "<dark_gray><bold>|</bold> <gray>Items <dark_gray>» <green><loot-count>"
+        - "<dark_gray><bold>|</bold> <gray>Close the inventory to save."
+        - ""
+        - "<dark_gray><bold>|</bold> <gray>ʟᴇꜰᴛ ᴄʟɪᴄᴋ <dark_gray>» <white>ᴇᴅɪᴛ"
+        - ""
+    location:
+      material: SCAFFOLDING
+      slot: 29
+      name: "<green><bold>SET LOCATION"
+      lore:
+        - ""
+        - "<dark_gray><bold>|</bold> <gray>Current <dark_gray>» <location>"
+        - ""
+        - "<dark_gray><bold>|</bold> <gray>ʟᴇꜰᴛ ᴄʟɪᴄᴋ <dark_gray>» <white>ʙʀᴇᴀᴋ ᴀ ʙʟᴏᴄᴋ"
+        - ""
+    pushback:
+      slot: 31
+      name: "<yellow><bold>SET PUSHBACK"
+      lore:
+        - ""
+        - "<dark_gray><bold>|</bold> <gray>Enabled <dark_gray>» <pushback>"
+        - "<dark_gray><bold>|</bold> <gray>Strength <dark_gray>» <green><pushback-strength>"
+        - ""
+        - "<dark_gray><bold>|</bold> <gray>ʟᴇꜰᴛ ᴄʟɪᴄᴋ <dark_gray>» <white>ꜱᴇᴛ ꜱᴛʀᴇɴɢᴛʜ"
+        - "<dark_gray><bold>|</bold> <gray>ǫ ᴋᴇʏ <dark_gray>» <white>ᴛᴏɢɢʟᴇ"
+        - ""
+      variants:
+        "on": { material: SLIME_BALL }
+        "off": { material: MAGMA_CREAM }
+    hologram:
+      slot: 33
+      name: "<light_purple><bold>SET HOLOGRAM"
+      lore:
+        - ""
+        - "<dark_gray><bold>|</bold> <gray>Enabled <dark_gray>» <hologram>"
+        - "<dark_gray><bold>|</bold> <gray>Lines <dark_gray>» <green><hologram-lines>"
+        - ""
+        - "<dark_gray><bold>|</bold> <gray>ʟᴇꜰᴛ ᴄʟɪᴄᴋ <dark_gray>» <white>ᴇᴅɪᴛ ʟɪɴᴇꜱ"
+        - "<dark_gray><bold>|</bold> <gray>ǫ ᴋᴇʏ <dark_gray>» <white>ᴛᴏɢɢʟᴇ"
+        - ""
+      variants:
+        "on": { material: SHULKER_SHELL, glow: true }
+        "off": { material: SHULKER_SHELL }
+    back:
+      material: ARROW
+      slot: 49
+      name: "<gray>Back"
+
+# Buttons: previous-page, next-page, add-line, height, toggle, back
+#   height: left = raise by 0.1, right = lower by 0.1
+#   "toggle" has "on"/"off" variants.
+# Placeholders everywhere: the treasure placeholders, <page>, <pages>
+# The "line" item is drawn once per hologram line in content-slots and also has:
+#   <number> = line number, <line> = rendered line, <raw> = the line as typed
+# Line clicks: left = edit, drop key (Q) = remove
+hologram-editor:
+  title: "<dark_gray><bold>EDIT HOLOGRAM"
+  rows: 6
+  content-slots: "0-44"
+  items:
+    bottom-bar:
+      material: GRAY_STAINED_GLASS_PANE
+      slot: "45-53"
+      name: " "
+      priority: -1
+    line:
+      material: PAPER
+      name: "<line>"
+      lore:
+        - ""
+        - "<dark_gray><bold>|</bold> <gray>Line <white><number>"
+        - "<dark_gray><bold>|</bold> <gray>Raw <dark_gray>» <white><raw>"
+        - ""
+        - "<dark_gray><bold>|</bold> <gray>ʟᴇꜰᴛ ᴄʟɪᴄᴋ <dark_gray>» <white>ᴇᴅɪᴛ ʟɪɴᴇ"
+        - "<dark_gray><bold>|</bold> <gray>ǫ ᴋᴇʏ <dark_gray>» <red>ʀᴇᴍᴏᴠᴇ ʟɪɴᴇ"
+        - ""
+    previous-page:
+      material: ARROW
+      slot: 45
+      name: "<gray>Previous page"
+      lore:
+        - "<dark_gray>Page <page>/<pages>"
+    toggle:
+      slot: 47
+      name: "<light_purple><bold>HOLOGRAM"
+      lore:
+        - ""
+        - "<dark_gray><bold>|</bold> <gray>Enabled <dark_gray>» <hologram>"
+        - ""
+        - "<dark_gray><bold>|</bold> <gray>ʟᴇꜰᴛ ᴄʟɪᴄᴋ <dark_gray>» <white>ᴛᴏɢɢʟᴇ"
+        - ""
+      variants:
+        "on": { material: LIME_DYE }
+        "off": { material: GRAY_DYE }
+    height:
+      material: IRON_NUGGET
+      slot: 48
+      name: "<aqua><bold>HEIGHT"
+      lore:
+        - ""
+        - "<dark_gray><bold>|</bold> <gray>Current <dark_gray>» <green><hologram-height>"
+        - ""
+        - "<dark_gray><bold>|</bold> <gray>ʟᴇꜰᴛ ᴄʟɪᴄᴋ <dark_gray>» <green>+0.1"
+        - "<dark_gray><bold>|</bold> <gray>ʀɪɢʜᴛ ᴄʟɪᴄᴋ <dark_gray>» <red>-0.1"
+        - ""
+    back:
+      material: BARRIER
+      slot: 49
+      name: "<gray>Back"
+    add-line:
+      material: BLAZE_POWDER
+      slot: 50
+      name: "<gold><bold>NEW LINE"
+      lore:
+        - ""
+        - "<dark_gray><bold>|</bold> <gray>Lines <dark_gray>» <green><hologram-lines>/20"
+        - ""
+        - "<dark_gray><bold>|</bold> <gray>ʟᴇꜰᴛ ᴄʟɪᴄᴋ <dark_gray>» <white>ɴᴇᴡ ʟɪɴᴇ"
+        - ""
+    next-page:
+      material: ARROW
+      slot: 53
+      name: "<gray>Next page"
+      lore:
+        - "<dark_gray>Page <page>/<pages>"
+
+# Do not change this; it is used to add new options to your file automatically.
+version: "1"

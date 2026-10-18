@@ -1,39 +1,24 @@
-# Gradle files
+# Gradle: caches and build output are regenerated on every build
 .gradle/
 build/
+# Local Gradle properties may contain credentials
 gradle.properties
 
-# IDE files
+# IDE files are per developer
 .idea/
 *.iml
 *.ipr
 *.iws
 .vscode/
 
-# OS generated files
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
-
-# Java compiled files
+# Compiled files (the Gradle wrapper jar must stay tracked)
 *.class
 *.jar
-*.war
-*.ear
+!gradle/wrapper/gradle-wrapper.jar
+
+# OS files
+.DS_Store
+Thumbs.db
 
 # Logs
 *.log
-
-# Runtime data
-pids
-*.pid
-*.seed
-*.pid.lock
-
-# Temporary folders
-tmp/
-temp/
