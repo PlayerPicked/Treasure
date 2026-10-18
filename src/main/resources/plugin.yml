@@ -1,7 +1,22 @@
-name: mc-Treasure
-version: '1.1.1'
-main: com.mongenscave.mctreasure.McTreasure
-api-version: '1.18'
-authors: [coma112]
-softdepend: [DecentHolograms, PlaceholderAPI, FancyHolograms]
+name: Treasure
+version: '${version}'
+main: com.playerpicked.treasure.Treasure
+api-version: '1.21.8'
+authors: [ coma112 ]
+description: Treasure chests with per-player cooldowns, holograms, particles and a tracker.
 folia-supported: true
+softdepend: [ PlaceholderAPI ]
+
+permissions:
+  treasure.setup:
+    description: Open the treasure setup menu with /treasure or /treasure setup.
+    default: op
+  treasure.tracker:
+    description: Give treasure trackers with /treasure give tracker <player>.
+    default: op
+  treasure.reload:
+    description: Reload config.yml, messages.yml and guis.yml.
+    default: op
+  treasure.update:
+    description: Get notified on join when a new plugin version is available.
+    default: op

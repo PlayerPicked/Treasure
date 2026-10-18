@@ -1,117 +1,70 @@
 plugins {
-    id("java")
-    id("com.gradleup.shadow") version("8.3.2")
-    id("io.github.revxrsal.zapper") version("1.0.2")
-    id("io.freefair.lombok") version("8.11")
-    id("maven-publish")
+    java
+    id("com.gradleup.shadow") version "8.3.10"
+    id("io.github.revxrsal.zapper") version "1.0.3"
 }
 
-group = "com.mongenscave"
-version = "1.1.1"
+group = "com.playerpicked"
+version = "2.0.0"
 
 repositories {
-    maven {
-        name = "MonGens-Cave"
-        url = uri("https://repo.mongenscave.com/")
-        credentials {
-            username = project.findProperty("mongensUsername") as String
-            password = project.findProperty("mongensPassword") as String
-        }
-    }
-
     mavenCentral()
-
     maven("https://repo.papermc.io/repository/maven-public/")
-    maven("https://oss.sonatype.org/content/groups/public/")
-    maven("https://jitpack.io")
-    maven("https://repo.artillex-studios.com/releases")
-    maven("https://nexus.hc.to/content/repositories/pub_releases")
-    maven("https://repo.mongenscave.com/releases")
-    maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
-    maven("https://repo.fancyinnovations.com/releases")
+    maven("https://repo.extendedclip.com/releases/")
 }
 
 dependencies {
-    implementation("io.github.revxrsal:lamp.bukkit:4.0.0-rc.12") {
+    compileOnly("io.papermc.paper:paper-api:1.21.8-R0.1-SNAPSHOT")
+    compileOnly("me.clip:placeholderapi:2.12.3")
+
+    implementation("io.github.revxrsal:lamp.bukkit:4.0.0-rc.19") {
         exclude(module = "lamp.common")
         exclude(module = "lamp.brigadier")
     }
+    implementation("dev.dejvokep:boosted-yaml:1.3.7")
 
-    zap("io.github.revxrsal:lamp.common:4.0.0-rc.12")
-    zap("io.github.revxrsal:lamp.brigadier:4.0.0-rc.12")
-    zap("org.bstats:bstats-bukkit:3.0.2")
-    implementation("com.github.Anon8281:UniversalScheduler:0.1.6")
-    zap("dev.dejvokep:boosted-yaml:1.3.6")
-    implementation("com.mongenscave:mc-ChatSetup:1.0.3")
-
-    compileOnly("io.papermc.paper:paper-api:1.21-R0.1-SNAPSHOT")
-    compileOnly("org.projectlombok:lombok:1.18.36")
-    compileOnly("com.github.decentsoftware-eu:decentholograms:2.8.17")
-    compileOnly("me.clip:placeholderapi:2.11.6")
-    compileOnly("de.oliver:FancyHolograms:2.6.0")
-}
-
-tasks.withType<JavaCompile> {
-    options.compilerArgs.add("-parameters")
+    zap("io.github.revxrsal:lamp.common:4.0.0-rc.19")
+    zap("io.github.revxrsal:lamp.brigadier:4.0.0-rc.19")
+    zap("com.mysql:mysql-connector-j:9.7.0")
+    zap("com.h2database:h2:2.5.252")
+    zap("com.zaxxer:HikariCP:7.1.0")
 }
 
 java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(21))
+    toolchain.languageVersion = JavaLanguageVersion.of(21)
+}
+
+tasks.withType<JavaCompile>().configureEach {
+    options.encoding = "UTF-8"
+    options.release = 21
+    options.compilerArgs.addAll(listOf("-parameters", "-Xlint:deprecation,removal,unchecked"))
+}
+
+tasks.processResources {
+    val pluginVersion = project.version.toString()
+    inputs.property("version", pluginVersion)
+    filesMatching("plugin.yml") {
+        expand("version" to pluginVersion)
     }
+}
+
+tasks.jar {
+    archiveClassifier = "plain"
+}
+
+tasks.shadowJar {
+    archiveClassifier = ""
+}
+
+tasks.build {
+    dependsOn(tasks.shadowJar)
 }
 
 zapper {
     libsFolder = "libs"
-    relocationPrefix = "com.mongenscave.mctreasure"
+    relocationPrefix = "com.playerpicked.treasure.libs"
 
     repositories { includeProjectRepositories() }
 
-    relocate("org.bstats", "bstats")
-    relocate("com.github.Anon8281.universalScheduler", "universalScheduler")
     relocate("dev.dejvokep.boostedyaml", "boostedyaml")
-}
-
-tasks.javadoc {
-    options.encoding = "UTF-8"
-    (options as StandardJavadocDocletOptions).addStringOption("Xdoclint:none", "-quiet")
-}
-
-val apiJar = tasks.register<Jar>("apiJar") {
-    archiveBaseName.set("mc-Treasure")
-    archiveClassifier.set("")
-    archiveVersion.set(project.version.toString())
-
-    from(sourceSets.main.get().output) {
-        include("com/mongenscave/mctreasure/api/**")
-    }
-}
-
-publishing {
-    publications {
-        create<MavenPublication>("apiJar") {
-            artifact(apiJar.get()) {
-                classifier = null
-            }
-
-            groupId = "com.mongenscave"
-            artifactId = "mc-Treasure"
-            version = project.version.toString()
-        }
-    }
-
-    repositories {
-        maven {
-            name = "MonGens-Cave"
-            url = uri("https://repo.mongenscave.com/releases")
-            credentials {
-                username = project.findProperty("mongensUsername") as String
-                password = project.findProperty("mongensPassword") as String
-            }
-        }
-    }
-}
-
-tasks.register("deployApi") {
-    dependsOn("apiJar", "publishApiJarPublicationToMonGens-CaveRepository")
 }
